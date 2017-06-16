@@ -4,15 +4,43 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>algorithm-priceton</groupId>
+    <groupId>algorithms-princeton</groupId>
     <artifactId>algorithms</artifactId>
     <version>0.0.1</version>
 
+    <repositories>
+        <repository>
+            <id>org.coursera.algs4</id>
+            <name>Algs4 coursera course custom repository</name>
+            <url>https://raw.github.com/slok/algs4-mvn-repo/master</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>com.googlecode.princeton-java-algorithms</groupId>
-            <artifactId>algorithms</artifactId>
-            <version>4.0.1</version>
+            <groupId>edu.princeton.cs.algs4</groupId>
+            <artifactId>algs4</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.11</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
 </project>
