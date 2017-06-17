@@ -19,7 +19,7 @@ public class PercolationStats {
                 int col = (position + 1) % n + 1;
                 percolation.open(row, col);
             }
-            probabilities[i] = percolation.numberOfOpenSites() / (n * n *1.0);
+            probabilities[i] = percolation.numberOfOpenSites() / (n * n * 1.0);
         }
     }   // perform trials independent experiments on an n-by-n grid
 
@@ -32,16 +32,17 @@ public class PercolationStats {
     }                       // sample standard deviation of percolation threshold
 
     public double confidenceLo() {
-        return (mean() - 1.96d * Math.sqrt(stddev())) / Math.sqrt(trials);
+        return mean() - 1.96d * stddev() / Math.sqrt(trials);
     }                  // low  endpoint of 95% confidence interval
 
     public double confidenceHi() {
-        return (mean() - 1.96d * Math.sqrt(stddev())) / Math.sqrt(trials);
+        return mean() + 1.96d * stddev() / Math.sqrt(trials);
     }                  // high endpoint of 95% confidence interval
+
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
-        if (n < 1 ) {
+        if (n < 1) {
             throw new IndexOutOfBoundsException();
         }
         PercolationStats stats = new PercolationStats(n, trials);

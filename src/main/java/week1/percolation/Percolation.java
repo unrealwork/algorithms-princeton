@@ -7,6 +7,7 @@ public class Percolation {
 
     private boolean[][] grid;
     private WeightedQuickUnionUF union;
+    private WeightedQuickUnionUF controlUnion;
     private int n;
     private int numberOfOpenSites;
     private final int IN = 0;
@@ -22,6 +23,7 @@ public class Percolation {
         OUT = n * n + 1;
         grid = new boolean[n][n];
         union = new WeightedQuickUnionUF(OUT + 1);
+        controlUnion = new WeightedQuickUnionUF(OUT);
     }              // create n-by-n grid, with all sites blocked
 
     public static void main(String[] args) {
@@ -35,19 +37,25 @@ public class Percolation {
             int index = transformIndex(row, col);
             if (row == 1) {
                 union.union(IN, index);
+                controlUnion.union(IN, index);
             }
             if (row == n) {
                 union.union(OUT, index);
             }
-            connectWithCell(row, col, row - 1, col);
-            connectWithCell(row, col, row + 1, col);
-            connectWithCell(row, col, row, col - 1);
-            connectWithCell(row, col, row, col + 1);
+            addNeighbors(union, row, col);
+            addNeighbors(controlUnion, row, col);
             numberOfOpenSites++;
         }
     }  // open site (row, col) if it is not open already
 
-    private void connectWithCell(int row, int col, int nRow, int nCol) {
+    private void addNeighbors(WeightedQuickUnionUF union, int row, int col) {
+        connectWithCell(union, row, col, row - 1, col);
+        connectWithCell(union, row, col, row + 1, col);
+        connectWithCell(union, row, col, row, col - 1);
+        connectWithCell(union, row, col, row, col + 1);
+    }
+
+    private void connectWithCell(WeightedQuickUnionUF union, int row, int col, int nRow, int nCol) {
         try {
             checkIndexesRange(nRow, nCol);
 
@@ -82,7 +90,7 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         checkIndexesRange(row, col);
-        return union.connected(IN, transformIndex(row, col));
+        return isOpen(row, col) && controlUnion.connected(IN, transformIndex(row, col));
     }  // is site (row, col) full?
 
     public int numberOfOpenSites() {
