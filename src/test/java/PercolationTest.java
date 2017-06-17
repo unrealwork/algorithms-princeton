@@ -1,7 +1,7 @@
-package week1.percolation;
-
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import uf.percolation.Percolation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,12 +15,12 @@ import static org.testng.Assert.assertEquals;
 public class PercolationTest {
     @Test(dataProvider = "percolatesProvider")
     public void testPercolates(String fileName, boolean expectedResult) {
-        assertEquals(readPercolation(fileName).percolates(), expectedResult);
+        Assert.assertEquals(readPercolation(fileName).percolates(), expectedResult);
     }
 
     @Test(dataProvider = "numberOfOpenSitesProvider")
     public void testPercolates(String fileName, int expectedResult) {
-        assertEquals(readPercolation(fileName).numberOfOpenSites(), expectedResult);
+        Assert.assertEquals(readPercolation(fileName).numberOfOpenSites(), expectedResult);
     }
 
 

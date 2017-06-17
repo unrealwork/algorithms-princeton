@@ -1,4 +1,4 @@
-package week1.unionfid;
+package uf.unionfid;
 
 
 public class QuickFindUF implements UF {
