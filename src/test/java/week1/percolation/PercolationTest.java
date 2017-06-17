@@ -23,6 +23,13 @@ public class PercolationTest {
         assertEquals(readPercolation(fileName).numberOfOpenSites(), expectedResult);
     }
 
+
+    @Test(dataProvider = "isFullDataProvider")
+    public void testIsFull(String fileName, int row, int col, boolean expectedResult) {
+        Percolation percolation = readPercolation(fileName);
+        assertEquals(percolation.isFull(row, col), expectedResult);
+    }
+
     @DataProvider(name = "percolatesProvider")
     private Object[][] providePercolatesData() {
         return new Object[][]{
@@ -39,6 +46,13 @@ public class PercolationTest {
     private Object[][] provideNumberOfOpenSitesData() {
         return new Object[][]{
                 {"input50.txt", 1412}
+        };
+    }
+
+    @DataProvider(name = "isFullDataProvider")
+    private Object[][] provideIsFullData() {
+        return new Object[][]{
+                {"input10.txt", 9, 1, false}
         };
     }
 

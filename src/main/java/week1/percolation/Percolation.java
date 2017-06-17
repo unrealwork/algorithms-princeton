@@ -9,6 +9,8 @@ public class Percolation {
     private WeightedQuickUnionUF union;
     private int n;
     private int numberOfOpenSites;
+    private final int IN = 0;
+    private final int OUT;
 
 
     public Percolation(int n) {
@@ -17,8 +19,9 @@ public class Percolation {
         }
         numberOfOpenSites = 0;
         this.n = n;
+        OUT = n * n + 1;
         grid = new boolean[n][n];
-        union = new WeightedQuickUnionUF(n * n);
+        union = new WeightedQuickUnionUF(OUT + 1);
     }              // create n-by-n grid, with all sites blocked
 
     public static void main(String[] args) {
@@ -26,8 +29,16 @@ public class Percolation {
     }  // test client (optional)
 
     public void open(int row, int col) {
+        checkIndexesRange(row, col);
         if (!isOpen(row, col)) {
             grid[row - 1][col - 1] = true;
+            int index = transformIndex(row, col);
+            if (row == 1) {
+                union.union(IN, index);
+            }
+            if (row == n) {
+                union.union(OUT, index);
+            }
             connectWithCell(row, col, row - 1, col);
             connectWithCell(row, col, row + 1, col);
             connectWithCell(row, col, row, col - 1);
@@ -61,7 +72,7 @@ public class Percolation {
     }
 
     private int transformIndex(int row, int col) {
-        return (row - 1) * n + col - 1;
+        return (row - 1) * n + col;
     }
 
     public boolean isOpen(int row, int col) {
@@ -70,15 +81,8 @@ public class Percolation {
     }  // is site (row, col) open?
 
     public boolean isFull(int row, int col) {
-        for (int i = 0; i < n; i++) {
-            if (grid[row - 1][col - 1]) {
-                int index = transformIndex(row, col);
-                if (union.connected(i, index)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        checkIndexesRange(row, col);
+        return union.connected(IN, transformIndex(row, col));
     }  // is site (row, col) full?
 
     public int numberOfOpenSites() {
@@ -86,11 +90,6 @@ public class Percolation {
     }       // number of open sites
 
     public boolean percolates() {
-        for (int i = 1; i <= n; i++) {
-            if (isFull(n, i)) {
-                return true;
-            }
-        }
-        return false;
+        return union.connected(IN, OUT);
     }           // does the system percolate?
 }
