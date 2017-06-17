@@ -1,7 +1,8 @@
+package uf.percolation;
+
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import uf.percolation.Percolation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
