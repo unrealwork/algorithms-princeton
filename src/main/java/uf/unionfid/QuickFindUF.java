@@ -1,9 +1,9 @@
-package week1.unionfid;
+package uf.unionfid;
 
 
-public class QuickFindUF {
+public class QuickFindUF implements UF {
     private int[] id;
-    
+
     public QuickFindUF(int n) {
         id = new int[n];
         for (int i = 0; i < n; i++) {
@@ -15,7 +15,7 @@ public class QuickFindUF {
         return id[p] == id[q];
     }
 
-    public void connect(int p, int q) {
+    public void union(int p, int q) {
         int pid = id[p];
         int qid = id[q];
 
