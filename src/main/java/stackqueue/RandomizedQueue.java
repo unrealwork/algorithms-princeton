@@ -75,9 +75,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    * @param item - item to add.
    */
   public void enqueue(Item item) {
-    if (isEmpty()) {
-      throw new NoSuchElementException();
-    }
     Node node = new Node(item);
     if (isEmpty()) {
       head = node;
