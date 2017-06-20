@@ -1,5 +1,6 @@
 package stackqueue;
 
+import edu.princeton.cs.algs4.In;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -67,5 +68,20 @@ public class DequeTest {
     deque.addFirst(5);
     deque.addFirst(6);
     deque.removeLast();
+  }
+
+  @Test
+  public void test1() {
+    Deque<Integer> deque = new Deque<>();
+    deque.addFirst(0);
+    deque.removeFirst();
+  }
+
+  @Test
+  public void test2() {
+    Deque<Integer> deque = new Deque<>();
+    deque.isEmpty();
+    deque.addFirst(1);
+    deque.removeFirst();
   }
 }

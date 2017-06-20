@@ -100,9 +100,10 @@ public class Deque<Item> implements Iterable<Item> {
     if (head == tail) {
       head = null;
       tail = null;
+    } else {
+      head = head.next;
+      head.previous = null;
     }
-    head = head.next;
-    head.previous = null;
     return result;
   }
 
