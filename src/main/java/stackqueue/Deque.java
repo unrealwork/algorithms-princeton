@@ -2,6 +2,7 @@ package stackqueue;
 
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Implement a simple deque.
@@ -54,6 +55,10 @@ public class Deque<Item> implements Iterable<Item> {
      * @param item
      */
     public void addFirst(Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        size++;
         Node node = new Node(item);
         if (isEmpty()) {
             head = node;
@@ -65,6 +70,10 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public void addLast(Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        size++;
         Node node = new Node(item);
         if (isEmpty()) {
             head = node;
@@ -82,6 +91,10 @@ public class Deque<Item> implements Iterable<Item> {
      * @return front element
      */
     public Item removeFirst() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        size--;
         Item result = head.value;
         if (head == tail) {
             head = null;
@@ -99,6 +112,10 @@ public class Deque<Item> implements Iterable<Item> {
      * @return a reference to removed element
      */
     public Item removeLast() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        size--;
         Item result = tail.value;
         tail = tail.previous;
         tail.next = null;
