@@ -84,4 +84,11 @@ public class DequeTest {
     deque.addFirst(1);
     deque.removeFirst();
   }
+
+  @Test
+  public void test3() {
+    Deque<Integer> deque = new Deque<>();
+    deque.addFirst(0);
+    deque.removeLast();
+  }
 }

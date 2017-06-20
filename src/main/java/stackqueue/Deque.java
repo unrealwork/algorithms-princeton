@@ -118,10 +118,18 @@ public class Deque<Item> implements Iterable<Item> {
       throw new NoSuchElementException();
     }
     size--;
-    Item result = tail.value;
-    tail = tail.previous;
-    tail.next = null;
+    Item result;
+    if (head == tail) {
+      result = head.value;
+      head = null;
+      tail = null;
+    } else {
+      result = tail.value;
+      tail = tail.previous;
+      tail.next = null;
+    }
     return result;
+
   }
 
   /**
