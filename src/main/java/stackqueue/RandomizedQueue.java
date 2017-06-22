@@ -6,24 +6,28 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-  private Item[] items = (Item[]) new Object[0];
+  private static final int DEFAULT_CAPACITY = 2;
+  private Item[] items = (Item[]) new Object[DEFAULT_CAPACITY];
 
   private class RandomizedIterator implements Iterator<Item> {
 
-    private RandomizedQueue<Item> backupQueue;
+    private RandomizedQueue<Item> rq;
 
-
-    public RandomizedIterator(RandomizedQueue<Item> queue) {
+    private RandomizedIterator(RandomizedQueue<Item> queue) {
+      rq = new RandomizedQueue<>();
+      for (int i = 0; i < queue.size; i++) {
+        rq.enqueue(queue.items[i]);
+      }
     }
 
     @Override
     public boolean hasNext() {
-      return !backupQueue.isEmpty();
+      return !rq.isEmpty();
     }
 
     @Override
     public Item next() {
-      return backupQueue.dequeue();
+      return rq.dequeue();
     }
 
     @Override
@@ -61,7 +65,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    */
   public void enqueue(Item item) {
     if (item == null) {
-      throw new NullPointerException();
+      throw new IllegalArgumentException();
     }
     size++;
     resize();
@@ -70,21 +74,26 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
   private void resize() {
     Item[] newArray;
+    if (size < DEFAULT_CAPACITY) {
+      return;
+    }
     if (items.length < size) {
-      newArray = (Item[]) new Object[size * 2];
+      newArray = createArray(size * 2 + 1);
+      System.arraycopy(items, 0, newArray, 0, items.length);
     } else {
-      if (size * 2 < items.length) {
-        newArray = (Item[]) new Object[size];
+      if (size * 2 + 1 <= items.length) {
+        newArray = createArray(size);
+        System.arraycopy(items, 0, newArray, 0, size);
       } else {
         return;
       }
     }
-    int i = 0;
-    for (Item e : items) {
-      i++;
-      newArray[i] = e;
-    }
     items = newArray;
+  }
+
+  private Item[] createArray(int size) {
+    Item[] arr = (Item[]) new Object[size];
+    return arr;
   }
 
   /**
@@ -138,15 +147,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    * @param args client params.
    */
   public static void main(String[] args) {
-    RandomizedQueue<String> queue = new RandomizedQueue<>();
-    queue.enqueue("a");
-    queue.enqueue("b");
-    queue.enqueue("c");
-    queue.enqueue("d");
-    queue.enqueue("e");
-
-    for (String s : queue) {
-      System.out.println(s);
+    RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+    for (int i = 0; i < 10; i++) {
+      rq.enqueue(i);
+    }
+    for (Integer e : rq) {
+      System.out.println(e);
     }
   }
 }
