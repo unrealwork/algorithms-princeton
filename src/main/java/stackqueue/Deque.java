@@ -1,26 +1,14 @@
 package stackqueue;
 
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
  * Implement a simple deque.
  *
- * @param <Item> any class.
+ * @param <T> any class.
  */
-public class Deque<Item> implements Iterable<Item> {
-
-  private class Node {
-
-    private Item value;
-    private Node next;
-    private Node previous;
-
-    private Node(Item value) {
-      this.value = value;
-    }
-  }
+public class Deque<T> implements Iterable<T> {
 
   private int size = 0;
   private Node head;
@@ -30,6 +18,15 @@ public class Deque<Item> implements Iterable<Item> {
    * Construct an empty deque.
    */
   public Deque() {
+  }
+
+  /**
+   * Test client
+   *
+   * @param args client's arguments.
+   */
+  public static void main(String[] args) {
+
   }
 
   /**
@@ -54,7 +51,7 @@ public class Deque<Item> implements Iterable<Item> {
   /**
    * Add the item to thhe front.
    */
-  public void addFirst(Item item) {
+  public void addFirst(T item) {
     if (item == null) {
       throw new NullPointerException();
     }
@@ -70,7 +67,12 @@ public class Deque<Item> implements Iterable<Item> {
     }
   }
 
-  public void addLast(Item item) {
+  /**
+   * Add the item to the end.
+   *
+   * @param item - instance of T.
+   */
+  public void addLast(T item) {
     if (item == null) {
       throw new NullPointerException();
     }
@@ -84,19 +86,19 @@ public class Deque<Item> implements Iterable<Item> {
       tail.next = node;
       tail = node;
     }
-  }          // add the item to the end
+  }
 
   /**
    * Remove and return the item from the front.
    *
    * @return front element
    */
-  public Item removeFirst() {
+  public T removeFirst() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
     size--;
-    Item result = head.value;
+    T result = head.value;
     if (head == tail) {
       head = null;
       tail = null;
@@ -113,12 +115,12 @@ public class Deque<Item> implements Iterable<Item> {
    *
    * @return a reference to removed element
    */
-  public Item removeLast() {
+  public T removeLast() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
     size--;
-    Item result;
+    T result;
     if (head == tail) {
       result = head.value;
       head = null;
@@ -133,12 +135,12 @@ public class Deque<Item> implements Iterable<Item> {
   }
 
   /**
-   * Return an iterator over items in order from front to end
+   * Return an iterator over items in order from front to end.
    *
    * @return iterator
    */
-  public Iterator<Item> iterator() {
-    return new Iterator<Item>() {
+  public Iterator<T> iterator() {
+    return new Iterator<T>() {
       private Node current = head;
 
       @Override
@@ -147,11 +149,11 @@ public class Deque<Item> implements Iterable<Item> {
       }
 
       @Override
-      public Item next() {
+      public T next() {
         if (current == null) {
           throw new NoSuchElementException();
         }
-        final Item value = current.value;
+        final T value = current.value;
         current = current.next;
         return value;
       }
@@ -163,13 +165,14 @@ public class Deque<Item> implements Iterable<Item> {
     };
   }
 
+  private class Node {
 
-  /**
-   * Test client
-   *
-   * @param args client's arguments.
-   */
-  public static void main(String[] args) {
+    private T value;
+    private Node next;
+    private Node previous;
 
+    private Node(T value) {
+      this.value = value;
+    }
   }
 }

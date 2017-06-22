@@ -4,42 +4,29 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue<T> implements Iterable<T> {
 
   private static final int DEFAULT_CAPACITY = 2;
-  private Item[] items = (Item[]) new Object[DEFAULT_CAPACITY];
-
-  private class RandomizedIterator implements Iterator<Item> {
-
-    private RandomizedQueue<Item> rq;
-
-    private RandomizedIterator(RandomizedQueue<Item> queue) {
-      rq = new RandomizedQueue<>();
-      for (int i = 0; i < queue.size; i++) {
-        rq.enqueue(queue.items[i]);
-      }
-    }
-
-    @Override
-    public boolean hasNext() {
-      return !rq.isEmpty();
-    }
-
-    @Override
-    public Item next() {
-      return rq.dequeue();
-    }
-
-    @Override
-    public void remove() {
-      throw new UnsupportedOperationException();
-    }
-  }
-
+  private T[] items = (T[]) new Object[DEFAULT_CAPACITY];
   private int size = 0;
 
   public RandomizedQueue() {
   }                // construct an empty randomized queue
+
+  /**
+   * Test client.
+   *
+   * @param args client params.
+   */
+  public static void main(String[] args) {
+    RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+    for (int i = 0; i < 10; i++) {
+      rq.enqueue(i);
+    }
+    for (Integer e : rq) {
+      System.out.println(e);
+    }
+  }
 
   /**
    * Is the qeque empty?
@@ -63,7 +50,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    *
    * @param item - item to add.
    */
-  public void enqueue(Item item) {
+  public void enqueue(T item) {
     if (item == null) {
       throw new IllegalArgumentException();
     }
@@ -73,7 +60,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   private void resize() {
-    Item[] newArray;
+    T[] newArray;
     if (size < DEFAULT_CAPACITY) {
       return;
     }
@@ -91,8 +78,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     items = newArray;
   }
 
-  private Item[] createArray(int size) {
-    Item[] arr = (Item[]) new Object[size];
+  private T[] createArray(int size) {
+    T[] arr = (T[]) new Object[size];
     return arr;
   }
 
@@ -101,7 +88,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    *
    * @return random item.
    */
-  public Item dequeue() {
+  public T dequeue() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
@@ -113,14 +100,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       return items[randomIndex];
     } else {
       swap(items, size, randomIndex);
-      Item item = items[size];
+      T item = items[size];
       resize();
       return item;
     }
   }
 
-  private void swap(Item[] arr, int i, int j) {
-    Item tmp = arr[i];
+  private void swap(T[] arr, int i, int j) {
+    T tmp = arr[i];
     arr[i] = arr[j];
     arr[j] = tmp;
   }
@@ -128,7 +115,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   /**
    * Return (but do not remove) a random item.
    */
-  public Item sample() {
+  public T sample() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
@@ -136,23 +123,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     return items[randomIndex];
   }                     //
 
-  public Iterator<Item> iterator() {
+  public Iterator<T> iterator() {
     return new RandomizedIterator(this);
   }     // return an independent iterator over items in random order
 
+  private class RandomizedIterator implements Iterator<T> {
 
-  /**
-   * Test client.
-   *
-   * @param args client params.
-   */
-  public static void main(String[] args) {
-    RandomizedQueue<Integer> rq = new RandomizedQueue<>();
-    for (int i = 0; i < 10; i++) {
-      rq.enqueue(i);
+    private RandomizedQueue<T> rq;
+
+    private RandomizedIterator(RandomizedQueue<T> queue) {
+      rq = new RandomizedQueue<>();
+      for (int i = 0; i < queue.size; i++) {
+        rq.enqueue(queue.items[i]);
+      }
     }
-    for (Integer e : rq) {
-      System.out.println(e);
+
+    @Override
+    public boolean hasNext() {
+      return !rq.isEmpty();
+    }
+
+    @Override
+    public T next() {
+      return rq.dequeue();
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
     }
   }
 }
