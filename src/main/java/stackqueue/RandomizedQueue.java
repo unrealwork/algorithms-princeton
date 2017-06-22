@@ -6,38 +6,28 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-  private class Node {
-
-    private Item value;
-    private Node next;
-
-    private Node(Item value) {
-      this.value = value;
-    }
-  }
+  private static final int DEFAULT_CAPACITY = 2;
+  private Item[] items = (Item[]) new Object[DEFAULT_CAPACITY];
 
   private class RandomizedIterator implements Iterator<Item> {
 
-    private RandomizedQueue<Item> backupQueue;
+    private RandomizedQueue<Item> rq;
 
-
-    public RandomizedIterator(RandomizedQueue<Item> queue) {
-      backupQueue = new RandomizedQueue<>();
-      Node pointer = queue.head;
-      while (pointer != null) {
-        backupQueue.enqueue(pointer.value);
-        pointer = pointer.next;
+    private RandomizedIterator(RandomizedQueue<Item> queue) {
+      rq = new RandomizedQueue<>();
+      for (int i = 0; i < queue.size; i++) {
+        rq.enqueue(queue.items[i]);
       }
     }
 
     @Override
     public boolean hasNext() {
-      return !backupQueue.isEmpty();
+      return !rq.isEmpty();
     }
 
     @Override
     public Item next() {
-      return backupQueue.dequeue();
+      return rq.dequeue();
     }
 
     @Override
@@ -47,7 +37,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   private int size = 0;
-  private Node head;
 
   public RandomizedQueue() {
   }                // construct an empty randomized queue
@@ -58,7 +47,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    * @return true if deque is empty {}.
    */
   public boolean isEmpty() {
-    return head == null;
+    return size == 0;
   }
 
 
@@ -76,16 +65,35 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    */
   public void enqueue(Item item) {
     if (item == null) {
-      throw new NullPointerException();
-    }
-    Node node = new Node(item);
-    if (isEmpty()) {
-      head = node;
-    } else {
-      node.next = head;
-      head = node;
+      throw new IllegalArgumentException();
     }
     size++;
+    resize();
+    items[size - 1] = item;
+  }
+
+  private void resize() {
+    Item[] newArray;
+    if (size < DEFAULT_CAPACITY) {
+      return;
+    }
+    if (items.length < size) {
+      newArray = createArray(size * 2 + 1);
+      System.arraycopy(items, 0, newArray, 0, items.length);
+    } else {
+      if (size * 2 + 1 <= items.length) {
+        newArray = createArray(size);
+        System.arraycopy(items, 0, newArray, 0, size);
+      } else {
+        return;
+      }
+    }
+    items = newArray;
+  }
+
+  private Item[] createArray(int size) {
+    Item[] arr = (Item[]) new Object[size];
+    return arr;
   }
 
   /**
@@ -99,20 +107,22 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     int randomIndex = StdRandom.uniform(size);
     int i = 0;
-    Node pointer = head;
     size--;
-    if (randomIndex == 0) {
-      head = head.next;
-      return pointer.value;
+
+    if (size == 0) {
+      return items[randomIndex];
     } else {
-      while (i + 1 < randomIndex) {
-        pointer = pointer.next;
-        i++;
-      }
-      Item item = pointer.next.value;
-      pointer.next = pointer.next.next;
+      swap(items, size, randomIndex);
+      Item item = items[size];
+      resize();
       return item;
     }
+  }
+
+  private void swap(Item[] arr, int i, int j) {
+    Item tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
   }
 
   /**
@@ -123,13 +133,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       throw new NoSuchElementException();
     }
     int randomIndex = StdRandom.uniform(size);
-    int i = 0;
-    Node pointer = head;
-    while (i < randomIndex) {
-      pointer = pointer.next;
-      i++;
-    }
-    return pointer.value;
+    return items[randomIndex];
   }                     //
 
   public Iterator<Item> iterator() {
@@ -143,15 +147,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    * @param args client params.
    */
   public static void main(String[] args) {
-    RandomizedQueue<String> queue = new RandomizedQueue<>();
-    queue.enqueue("a");
-    queue.enqueue("b");
-    queue.enqueue("c");
-    queue.enqueue("d");
-    queue.enqueue("e");
-
-    for (String s : queue) {
-      System.out.println(s);
+    RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+    for (int i = 0; i < 10; i++) {
+      rq.enqueue(i);
+    }
+    for (Integer e : rq) {
+      System.out.println(e);
     }
   }
 }
