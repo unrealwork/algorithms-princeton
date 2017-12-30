@@ -11,6 +11,7 @@
     <modules>
         <module>heaps</module>
         <module>trees</module>
+        <module>graphs</module>
     </modules>
 
     <repositories>
