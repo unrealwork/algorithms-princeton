@@ -1,6 +1,5 @@
 package api;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -13,7 +12,9 @@ public class AdjacentListsGraph implements Graph {
     public AdjacentListsGraph(final int v) {
         this.vertices = v;
         adj = new Set[this.vertices];
-        Arrays.fill(adj, new TreeSet<Integer>());
+        for (int i = 0; i < adj.length; i++) {
+            adj[i] = new TreeSet<>();
+        }
         this.edges = 0;
     }
 
